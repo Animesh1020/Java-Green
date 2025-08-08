@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>View Cart</title>
+    <a href="sunnydays_menu.html"
+    <style>
+        /* Add your CSS styles here */
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Your Cart</h1>
+    </header>
+    <main id="cart-items"></main>
+    <footer>
+        <p>&copy; 2024 Delicious Dishes Restaurant. All rights reserved.</p>
+    </footer>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const params = new URLSearchParams(window.location.search);
+        const cartItems = JSON.parse(params.get('cartItems'));
+
+        const cartItemsContainer = document.getElementById('cart-items');
+
+        cartItems.forEach(item => {
+            const itemElement = document.createElement('div');
+            itemElement.innerHTML = `<p><strong>${item.name}</strong></p>
+                                      <p>Quantity: ${item.quantity}</p>
+                                      <p>Total Price: ₹${item.price * item.quantity}</p>`;
+            cartItemsContainer.appendChild(itemElement);
+        });
+    });
+</script>
+    
+        
+</body>
+
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu</title>
+    <link rel="stylesheet" href="sunnydays_menu.css">
+</head>
+
+<body>
+    <header>
+        <h1>Sunny Days</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="menu.html" class="active">Menu</a></li>
+                <li><a href="cart.html">Cart</a></li>
+                <li><a href="payment.html">Payment</a></li>
+                <li><a href="order_history.html">Order History</a></li>
+            </ul>
+        </nav>
+        <div id="cart-button" onclick="showCart()">Cart (0)</div>
+    </header>
+    <main>
+        <section class="menu">
+            <h2>Our Menu</h2>
+            <div class="menu-item" data-name="French Fries" data-price="60">
+                <img src="img/french_fries.jpg" alt="French Fries">
+                <h3>French Fries</h3>
+                <p>Savor the sizzle of our irresistibly golden French fries, bursting with flavor in every crispy bite.
+                </p><br>
+                <span>₹60</span>
+                <span>
+                    <div class="mainbutton" onclick="addToCart('French Fries', 60)">ADD</div>
+                </span>
+            </div>
+            <!-- Add other menu items here -->
+        </section>
+        
+    </main>
+    <footer>
+        <p>&copy; 2024 Delicious Dishes Restaurant. All rights reserved.</p>
+    </footer>
+
+    <div id="cart-container" style="display: none;">
+        <h2>Cart</h2>
+        <div id="cart-items"></div>
+        <div id="cart-total"></div>
+        <button onclick="proceedToPayment()">Proceed to Payment</button>
+    </div>
+
+    <script>
+        let cart = {};
+
+        function addToCart(name, price) {
+            if (cart[name]) {
+                cart[name].quantity++;
+            } else {
+                cart[name] = { price: price, quantity: 1 };
+            }
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            const cartItemsElement = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            cartItemsElement.innerHTML = '';
+            let totalPrice = 0;
+            let totalQuantity = 0;
+
+            for (const itemName in cart) {
+                const item = cart[itemName];
+                totalPrice += item.price * item.quantity;
+                totalQuantity += item.quantity;
+                const itemElement = document.createElement('div');
+                itemElement.innerHTML = `
+                    <p>${itemName} - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</p>`;
+                cartItemsElement.appendChild(itemElement);
+            }
+
+            cartTotalElement.textContent = `Total Price: ₹${totalPrice}`;
+            document.getElementById('cart-button').textContent = `Cart (${totalQuantity})`;
+        }
+
+        function showCart() {
+            const cartContainer = document.getElementById('cart-container');
+            cartContainer.style.display = 'block';
+            updateCartUI();
+        }
+
+        function proceedToPayment() {
+            const cartItems = Object.keys(cart).map(name => ({ name: name, price: cart[name].price, quantity: cart[name].quantity }));
+            const cartJson = JSON.stringify(cartItems);
+            localStorage.setItem('cartItems', cartJson);
+            window.location.href = 'payment.html';
+        }
+    </script>
+</body>
+
+</html>

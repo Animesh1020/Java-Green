@@ -1,0 +1,45 @@
+<div id="cart-container" style="display: none;">
+    <h2>Cart</h2>
+    <div id="cart-items"></div>
+    <div id="cart-total"></div>
+</div>
+
+<script>
+    let cart = {};
+
+    function addToCart(name, price) {
+        if (cart[name]) {
+            cart[name].quantity++;
+        } else {
+            cart[name] = { price: price, quantity: 1 };
+        }
+        updateCartUI();
+    }
+
+    function updateCartUI() {
+        const cartItemsElement = document.getElementById('cart-items');
+        const cartTotalElement = document.getElementById('cart-total');
+        cartItemsElement.innerHTML = '';
+        let totalPrice = 0;
+        let totalQuantity = 0;
+
+        for (const itemName in cart) {
+            const item = cart[itemName];
+            totalPrice += item.price * item.quantity;
+            totalQuantity += item.quantity;
+            const itemElement = document.createElement('div');
+            itemElement.innerHTML = `
+                <p>${itemName} - ₹${item.price} x ${item.quantity} = ₹${item.price * item.quantity}</p>`;
+            cartItemsElement.appendChild(itemElement);
+        }
+
+        cartTotalElement.textContent = `Total Price: ₹${totalPrice}`;
+        document.getElementById('cart-button').textContent = `Cart (${totalQuantity})`;
+    }
+
+    function showCart() {
+        const cartContainer = document.getElementById('cart-container');
+        cartContainer.style.display = 'block';
+        updateCartUI();
+    }
+</script>
